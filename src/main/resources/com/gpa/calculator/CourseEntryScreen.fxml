@@ -34,12 +34,13 @@
     <center>
         <TableView fx:id="courseTableView" styleClass="table-view">
             <columns>
-                <TableColumn fx:id="courseNameCol" text="Course Name" prefWidth="250"/>
-                <TableColumn fx:id="courseCodeCol" text="Course Code" prefWidth="120"/>
-                <TableColumn fx:id="courseCreditCol" text="Credits" prefWidth="80"/>
-                <TableColumn fx:id="gradeCol" text="Grade" prefWidth="80"/>
-                <TableColumn fx:id="teacher1Col" text="Teacher 1" prefWidth="180"/>
-                <TableColumn fx:id="teacher2Col" text="Teacher 2" prefWidth="180"/>
+                <TableColumn fx:id="courseNameCol" text="Course Name" prefWidth="220"/>
+                <TableColumn fx:id="courseCodeCol" text="Course Code" prefWidth="100"/>
+                <TableColumn fx:id="courseCreditCol" text="Credits" prefWidth="70"/>
+                <TableColumn fx:id="gradeCol" text="Grade" prefWidth="70"/>
+                <TableColumn fx:id="teacher1Col" text="Teacher 1" prefWidth="150"/>
+                <TableColumn fx:id="teacher2Col" text="Teacher 2" prefWidth="150"/>
+                <TableColumn fx:id="deleteCol" text="Action" prefWidth="80"/>
             </columns>
             <BorderPane.margin>
                 <Insets top="10" right="10" bottom="10" left="10"/>
@@ -89,6 +90,8 @@
             </GridPane>
 
             <Separator/>
+
+            <Button fx:id="resetButton" text="Reset All Courses" onAction="#handleResetCoursesButtonAction" styleClass="button-reset"/>
 
             <VBox spacing="10" alignment="CENTER">
                 <Label fx:id="creditTargetLabel" text="Target Credits: 15" styleClass="info-label"/>

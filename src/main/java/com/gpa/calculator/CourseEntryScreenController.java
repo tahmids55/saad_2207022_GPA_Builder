@@ -40,12 +40,14 @@ public class CourseEntryScreenController implements Initializable {
 
     @FXML private Button calculateGpaButton;
     @FXML private Button backButton;
+    @FXML private Button resetButton;
     @FXML private Label totalCreditsLabel;
     @FXML private Label currentGpaLabel;
     @FXML private Label errorLabel;
     @FXML private Label creditTargetLabel;
     @FXML private TextField creditTargetField;
     @FXML private Button setCreditTargetButton;
+    @FXML private TableColumn<Course, Void> deleteCol;
 
     // --- Class Fields ---
     public static final ObservableList<Course> courseList = FXCollections.observableArrayList();
@@ -62,6 +64,29 @@ public class CourseEntryScreenController implements Initializable {
         gradeCol.setCellValueFactory(new PropertyValueFactory<>("grade"));
         teacher1Col.setCellValueFactory(new PropertyValueFactory<>("teacher1Name"));
         teacher2Col.setCellValueFactory(new PropertyValueFactory<>("teacher2Name"));
+
+        // Set up the delete column with delete buttons
+        deleteCol.setCellFactory(param -> new TableCell<Course, Void>() {
+            private final Button deleteButton = new Button("Delete");
+            
+            {
+                deleteButton.setOnAction(event -> {
+                    Course course = getTableView().getItems().get(getIndex());
+                    deleteCourse(course);
+                });
+                deleteButton.setStyle("-fx-background-color: #ef4444; -fx-text-fill: white; -fx-padding: 5 10 5 10; -fx-background-radius: 4;");
+            }
+            
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(deleteButton);
+                }
+            }
+        });
 
         // Populate the ComboBoxes with predefined values.
         gradeComboBox.setItems(FXCollections.observableArrayList("A+", "A", "A-", "B+", "B", "B-", "C+", "C", "D", "F"));
@@ -191,6 +216,35 @@ public class CourseEntryScreenController implements Initializable {
         } catch (IOException e) {
             System.err.println("Failed to load the Home screen.");
             e.printStackTrace();
+        }
+    }
+
+    // Handles the "Reset" button click to clear all courses.
+    @FXML
+    private void handleResetCoursesButtonAction() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Reset");
+        alert.setHeaderText("Clear All Courses");
+        alert.setContentText("Are you sure you want to delete all courses? This action cannot be undone.");
+        
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            courseList.clear();
+            updateCreditsAndGpa();
+            errorLabel.setText("All courses have been reset!");
+        }
+    }
+
+    // Handles individual course deletion.
+    public void deleteCourse(Course course) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Delete");
+        alert.setHeaderText("Delete Course");
+        alert.setContentText("Are you sure you want to delete " + course.getCourseName() + "?");
+        
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            courseList.remove(course);
+            updateCreditsAndGpa();
+            errorLabel.setText("Course deleted successfully!");
         }
     }
 
