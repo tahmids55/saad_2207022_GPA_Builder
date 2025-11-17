@@ -64,6 +64,20 @@
     -fx-background-color: #16a34a; /* Darker green on hover */
 }
 
+.button-back {
+    -fx-background-color: #6b7280; /* Grey for back button */
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 12 8 12;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.button-back:hover {
+    -fx-background-color: #4b5563; /* Darker grey on hover */
+}
+
 /* Form and Result Panes */
 .form-pane, .result-pane {
     -fx-background-color: #FFFFFF;

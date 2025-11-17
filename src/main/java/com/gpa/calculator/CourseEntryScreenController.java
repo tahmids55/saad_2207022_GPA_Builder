@@ -39,13 +39,17 @@ public class CourseEntryScreenController implements Initializable {
     @FXML private ComboBox<String> gradeComboBox;
 
     @FXML private Button calculateGpaButton;
+    @FXML private Button backButton;
     @FXML private Label totalCreditsLabel;
     @FXML private Label currentGpaLabel;
     @FXML private Label errorLabel;
+    @FXML private Label creditTargetLabel;
+    @FXML private TextField creditTargetField;
+    @FXML private Button setCreditTargetButton;
 
     // --- Class Fields ---
     public static final ObservableList<Course> courseList = FXCollections.observableArrayList();
-    private final int requiredCredits = 15; // The total credits needed to enable GPA calculation.
+    private int requiredCredits = 15; // The total credits needed to enable GPA calculation (now modifiable).
     private int currentCredits = 0;
 
     // This method is automatically called after the FXML file has been loaded.
@@ -65,6 +69,10 @@ public class CourseEntryScreenController implements Initializable {
 
         // Bind the table view to the observable list of courses.
         courseTableView.setItems(courseList);
+        
+        // Initialize the credit target field and label
+        creditTargetLabel.setText("Target Credits: " + requiredCredits);
+        creditTargetField.setText(String.valueOf(requiredCredits));
 
         // Initialize the view with any pre-loaded data
         updateViewWithExistingData();
@@ -146,6 +154,44 @@ public class CourseEntryScreenController implements Initializable {
         teacher2NameField.clear();
         courseCreditComboBox.getSelectionModel().clearSelection();
         gradeComboBox.getSelectionModel().clearSelection();
+    }
+
+    // Handles the "Set Credit Target" button click.
+    @FXML
+    private void handleSetCreditTargetButtonAction() {
+        try {
+            int newTarget = Integer.parseInt(creditTargetField.getText());
+            if (newTarget > 0) {
+                requiredCredits = newTarget;
+                creditTargetLabel.setText("Target Credits: " + requiredCredits);
+                updateCreditsAndGpa();
+                errorLabel.setText("Credit target updated successfully!");
+            } else {
+                errorLabel.setText("Error: Credit target must be greater than 0.");
+            }
+        } catch (NumberFormatException e) {
+            errorLabel.setText("Error: Please enter a valid number.");
+        }
+    }
+
+    // Handles the "Back" button click to return to home screen.
+    @FXML
+    private void handleBackButtonAction(ActionEvent event) {
+        try {
+            // Load the home screen FXML.
+            Parent homeScreenRoot = FXMLLoader.load(getClass().getResource("HomeScreen.fxml"));
+            
+            // Get the current stage and set the scene back to the home screen.
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(homeScreenRoot);
+            stage.setScene(scene);
+            stage.setTitle("GPA Calculator");
+            stage.show();
+
+        } catch (IOException e) {
+            System.err.println("Failed to load the Home screen.");
+            e.printStackTrace();
+        }
     }
 
     // Handles the "Calculate GPA" button click.

@@ -56,6 +56,9 @@ public class ResultScreenController implements Initializable {
     @FXML
     private void handleStartOverButtonAction(ActionEvent event) {
         try {
+            // Clear the course list for a fresh start
+            CourseEntryScreenController.courseList.clear();
+            
             // Load the home screen FXML.
             Parent homeScreenRoot = FXMLLoader.load(getClass().getResource("HomeScreen.fxml"));
             
