@@ -78,6 +78,20 @@
     -fx-background-color: #4b5563; /* Darker grey on hover */
 }
 
+.button-reset {
+    -fx-background-color: #ef4444; /* Red for reset button */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 18 10 18;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.button-reset:hover {
+    -fx-background-color: #dc2626; /* Darker red on hover */
+}
+
 /* Form and Result Panes */
 .form-pane, .result-pane {
     -fx-background-color: #FFFFFF;
