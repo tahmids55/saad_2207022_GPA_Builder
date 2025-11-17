@@ -26,14 +26,14 @@ public class CourseEntryScreenController implements Initializable {
     @FXML private TableView<Course> courseTableView;
     @FXML private TableColumn<Course, String> courseNameCol;
     @FXML private TableColumn<Course, String> courseCodeCol;
-    @FXML private TableColumn<Course, Integer> courseCreditCol;
+    @FXML private TableColumn<Course, Double> courseCreditCol;
     @FXML private TableColumn<Course, String> gradeCol;
     @FXML private TableColumn<Course, String> teacher1Col;
     @FXML private TableColumn<Course, String> teacher2Col;
 
     @FXML private TextField courseNameField;
     @FXML private TextField courseCodeField;
-    @FXML private ComboBox<Integer> courseCreditComboBox;
+    @FXML private TextField courseCreditField;
     @FXML private TextField teacher1NameField;
     @FXML private TextField teacher2NameField;
     @FXML private ComboBox<String> gradeComboBox;
@@ -51,8 +51,8 @@ public class CourseEntryScreenController implements Initializable {
 
     // --- Class Fields ---
     public static final ObservableList<Course> courseList = FXCollections.observableArrayList();
-    private int requiredCredits = 15; // The total credits needed to enable GPA calculation (now modifiable).
-    private int currentCredits = 0;
+    private double requiredCredits = 15.0; // The total credits needed to enable GPA calculation (now modifiable).
+    private double currentCredits = 0.0;
 
     // This method is automatically called after the FXML file has been loaded.
     @Override
@@ -88,9 +88,8 @@ public class CourseEntryScreenController implements Initializable {
             }
         });
 
-        // Populate the ComboBoxes with predefined values.
+        // Populate the ComboBox with predefined values.
         gradeComboBox.setItems(FXCollections.observableArrayList("A+", "A", "A-", "B+", "B", "B-", "C+", "C", "D", "F"));
-        courseCreditComboBox.setItems(FXCollections.observableArrayList(1, 2, 3, 4, 5));
 
         // Bind the table view to the observable list of courses.
         courseTableView.setItems(courseList);
@@ -111,21 +110,31 @@ public class CourseEntryScreenController implements Initializable {
             return;
         }
 
-        // Create a new Course object from the form data.
-        Course newCourse = new Course(
-                courseNameField.getText(),
-                courseCodeField.getText(),
-                courseCreditComboBox.getValue(),
-                teacher1NameField.getText(),
-                teacher2NameField.getText(),
-                gradeComboBox.getValue()
-        );
+        try {
+            double creditValue = Double.parseDouble(courseCreditField.getText());
+            if (creditValue <= 0) {
+                errorLabel.setText("Error: Credit must be greater than 0.");
+                return;
+            }
 
-        // Add the new course to the list and update the UI.
-        courseList.add(newCourse);
-        updateCreditsAndGpa();
-        clearForm();
-        errorLabel.setText("Course added successfully!");
+            // Create a new Course object from the form data.
+            Course newCourse = new Course(
+                    courseNameField.getText(),
+                    courseCodeField.getText(),
+                    creditValue,
+                    teacher1NameField.getText(),
+                    teacher2NameField.getText(),
+                    gradeComboBox.getValue()
+            );
+
+            // Add the new course to the list and update the UI.
+            courseList.add(newCourse);
+            updateCreditsAndGpa();
+            clearForm();
+            errorLabel.setText("Course added successfully!");
+        } catch (NumberFormatException e) {
+            errorLabel.setText("Error: Please enter a valid credit number.");
+        }
     }
 
     // Validates that all required fields are filled.
@@ -133,7 +142,7 @@ public class CourseEntryScreenController implements Initializable {
         if (courseNameField.getText().isEmpty() ||
             courseCodeField.getText().isEmpty() ||
             teacher1NameField.getText().isEmpty() ||
-            courseCreditComboBox.getValue() == null ||
+            courseCreditField.getText().isEmpty() ||
             gradeComboBox.getValue() == null) {
             
             errorLabel.setText("Error: All fields except Teacher 2 must be filled.");
@@ -149,8 +158,8 @@ public class CourseEntryScreenController implements Initializable {
 
     // Updates the credit total and GPA display.
     private void updateCreditsAndGpa() {
-        currentCredits = courseList.stream().mapToInt(Course::getCourseCredit).sum();
-        totalCreditsLabel.setText("Current Credits: " + currentCredits);
+        currentCredits = courseList.stream().mapToDouble(Course::getCourseCredit).sum();
+        totalCreditsLabel.setText(String.format("Current Credits: %.2f", currentCredits));
 
         double gpa = calculateGpa();
         currentGpaLabel.setText(String.format("Current GPA: %.2f", gpa));
@@ -177,7 +186,7 @@ public class CourseEntryScreenController implements Initializable {
         courseCodeField.clear();
         teacher1NameField.clear();
         teacher2NameField.clear();
-        courseCreditComboBox.getSelectionModel().clearSelection();
+        courseCreditField.clear();
         gradeComboBox.getSelectionModel().clearSelection();
     }
 
@@ -185,10 +194,10 @@ public class CourseEntryScreenController implements Initializable {
     @FXML
     private void handleSetCreditTargetButtonAction() {
         try {
-            int newTarget = Integer.parseInt(creditTargetField.getText());
+            double newTarget = Double.parseDouble(creditTargetField.getText());
             if (newTarget > 0) {
                 requiredCredits = newTarget;
-                creditTargetLabel.setText("Target Credits: " + requiredCredits);
+                creditTargetLabel.setText(String.format("Target Credits: %.2f", requiredCredits));
                 updateCreditsAndGpa();
                 errorLabel.setText("Credit target updated successfully!");
             } else {
@@ -278,7 +287,7 @@ public class CourseEntryScreenController implements Initializable {
     // Calculates the final GPA based on the list of courses.
     private double calculateGpa() {
         double totalPoints = 0;
-        int totalCredits = 0;
+        double totalCredits = 0;
 
         for (Course course : courseList) {
             totalPoints += getGradePoints(course.getGrade()) * course.getCourseCredit();

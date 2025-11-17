@@ -53,7 +53,7 @@
                 <TextField fx:id="courseCodeField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
                 <Label text="Course Credit:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                <ComboBox fx:id="courseCreditComboBox" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="200"/>
+                <TextField fx:id="courseCreditField" GridPane.rowIndex="2" GridPane.columnIndex="1" promptText="e.g. 3.0 or 1.5"/>
 
                 <Label text="Teacher 1 Name:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
                 <TextField fx:id="teacher1NameField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>

@@ -27,7 +27,7 @@ public class ResultScreenController implements Initializable {
     @FXML private TableView<Course> resultTableView;
     @FXML private TableColumn<Course, String> courseNameCol;
     @FXML private TableColumn<Course, String> courseCodeCol;
-    @FXML private TableColumn<Course, Integer> courseCreditCol;
+    @FXML private TableColumn<Course, Double> courseCreditCol;
     @FXML private TableColumn<Course, String> gradeCol;
     @FXML private TableColumn<Course, String> teacher1Col;
     @FXML private TableColumn<Course, String> teacher2Col;

@@ -8,13 +8,13 @@ public class Course {
     // Fields to store course details
     private String courseName;
     private String courseCode;
-    private int courseCredit;
+    private double courseCredit;
     private String teacher1Name;
     private String teacher2Name;
     private String grade;
 
     // Constructor to initialize a Course object
-    public Course(String courseName, String courseCode, int courseCredit, String teacher1Name, String teacher2Name, String grade) {
+    public Course(String courseName, String courseCode, double courseCredit, String teacher1Name, String teacher2Name, String grade) {
         this.courseName = courseName;
         this.courseCode = courseCode;
         this.courseCredit = courseCredit;
@@ -34,7 +34,7 @@ public class Course {
     }
 
     // Getter for courseCredit.
-    public int getCourseCredit() {
+    public double getCourseCredit() {
         return courseCredit;
     }
 
@@ -76,7 +76,7 @@ public class Course {
         return new Course(
                 fields[0],
                 fields[1],
-                Integer.parseInt(fields[2]),
+                Double.parseDouble(fields[2]),
                 fields[3],
                 fields[4],
                 fields[5]
