@@ -4,19 +4,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<!--
-  This FXML file defines the main screen for entering course details.
-  - A BorderPane structures the layout into a top title, a center table, and a right-side form.
-  - A GridPane is used for the input form for clean alignment.
-  - A TableView displays the list of added courses.
-  - Buttons for adding a course and calculating GPA are included.
-  - A back button allows users to return to the home screen.
--->
 <BorderPane xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.gpa.calculator.CourseEntryScreenController"
             prefHeight="600" prefWidth="1100" styleClass="root">
 
-    <!-- Top section for the header with back button -->
     <top>
         <BorderPane>
             <left>
@@ -30,7 +21,6 @@
         </BorderPane>
     </top>
 
-    <!-- Center section for the table of courses -->
     <center>
         <TableView fx:id="courseTableView" styleClass="table-view">
             <columns>
@@ -47,8 +37,6 @@
             </BorderPane.margin>
         </TableView>
     </center>
-
-    <!-- Right section for the input form and controls -->
     <right>
         <VBox spacing="15" alignment="TOP_LEFT" styleClass="form-pane">
             <padding>
