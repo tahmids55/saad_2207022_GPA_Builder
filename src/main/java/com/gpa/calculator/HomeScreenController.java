@@ -18,24 +18,24 @@ public class HomeScreenController {
     @FXML
     private void handleStartButtonAction(ActionEvent event) {
         try {
-            // Load the FXML file for the course entry screen.
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("CourseEntryScreen.fxml"));
-            Parent courseEntryRoot = loader.load();
+            // Load the FXML file for the login screen.
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
+            Parent loginRoot = loader.load();
 
             // Get the current stage (window) from the event source.
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            // Create a new scene with the course entry screen layout.
-            Scene scene = new Scene(courseEntryRoot);
+            // Create a new scene with the login screen layout.
+            Scene scene = new Scene(loginRoot);
             
             // Set the new scene on the stage.
             stage.setScene(scene);
-            stage.setTitle("Enter Course Details");
+            stage.setTitle("Student Login");
             stage.show();
 
         } catch (IOException e) {
             // Print an error message if the FXML file cannot be loaded.
-            System.err.println("Failed to load the Course Entry screen.");
+            System.err.println("Failed to load the Login screen.");
             e.printStackTrace();
         }
     }

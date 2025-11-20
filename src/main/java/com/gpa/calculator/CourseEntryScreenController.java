@@ -53,10 +53,18 @@ public class CourseEntryScreenController implements Initializable {
     public static final ObservableList<Course> courseList = FXCollections.observableArrayList();
     private double requiredCredits = 15.0; // The total credits needed to enable GPA calculation (now modifiable).
     private double currentCredits = 0.0;
+    
+    // Database and current student
+    private DatabaseManager databaseManager;
+    private Student currentStudent;
 
     // This method is automatically called after the FXML file has been loaded.
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Initialize database manager
+        databaseManager = new DatabaseManager();
+        currentStudent = CurrentStudent.getStudent();
+        
         // Set up the table columns to display data from the Course objects.
         courseNameCol.setCellValueFactory(new PropertyValueFactory<>("courseName"));
         courseCodeCol.setCellValueFactory(new PropertyValueFactory<>("courseCode"));
@@ -98,8 +106,18 @@ public class CourseEntryScreenController implements Initializable {
         creditTargetLabel.setText("Target Credits: " + requiredCredits);
         creditTargetField.setText(String.valueOf(requiredCredits));
 
-        // Initialize the view with any pre-loaded data
-        updateViewWithExistingData();
+        // Load existing courses from database
+        loadStudentCourses();
+    }
+    
+    // Load courses from database for the current student
+    private void loadStudentCourses() {
+        if (currentStudent != null) {
+            courseList.clear();
+            List<Course> existingCourses = databaseManager.getStudentCourses(currentStudent.getId());
+            courseList.addAll(existingCourses);
+            updateCreditsAndGpa();
+        }
     }
 
     // Handles the "Add Course" button click.
@@ -127,11 +145,20 @@ public class CourseEntryScreenController implements Initializable {
                     gradeComboBox.getValue()
             );
 
-            // Add the new course to the list and update the UI.
-            courseList.add(newCourse);
-            updateCreditsAndGpa();
-            clearForm();
-            errorLabel.setText("Course added successfully!");
+            // Add to database
+            if (currentStudent != null) {
+                if (databaseManager.addCourse(currentStudent.getId(), newCourse)) {
+                    // Add the new course to the list and update the UI.
+                    courseList.add(newCourse);
+                    updateCreditsAndGpa();
+                    clearForm();
+                    errorLabel.setText("Course added successfully!");
+                } else {
+                    errorLabel.setText("Error: Failed to add course to database.");
+                }
+            } else {
+                errorLabel.setText("Error: Student not initialized.");
+            }
         } catch (NumberFormatException e) {
             errorLabel.setText("Error: Please enter a valid credit number.");
         }
@@ -179,6 +206,24 @@ public class CourseEntryScreenController implements Initializable {
         }
     }
 
+    // Handles the "Reset" button click to clear all courses.
+    @FXML
+    private void handleResetCoursesButtonAction() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Reset");
+        alert.setHeaderText("Clear All Courses");
+        alert.setContentText("Are you sure you want to delete all courses? This action cannot be undone.");
+        
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            if (currentStudent != null) {
+                databaseManager.clearStudentCourses(currentStudent.getId());
+            }
+            courseList.clear();
+            updateCreditsAndGpa();
+            errorLabel.setText("All courses have been reset!");
+        }
+    }
+
 
     // Clears all input fields after a course is added.
     private void clearForm() {
@@ -212,6 +257,10 @@ public class CourseEntryScreenController implements Initializable {
     @FXML
     private void handleBackButtonAction(ActionEvent event) {
         try {
+            // Clear current student and course list
+            CurrentStudent.clear();
+            courseList.clear();
+            
             // Load the home screen FXML.
             Parent homeScreenRoot = FXMLLoader.load(getClass().getResource("HomeScreen.fxml"));
             
@@ -225,21 +274,6 @@ public class CourseEntryScreenController implements Initializable {
         } catch (IOException e) {
             System.err.println("Failed to load the Home screen.");
             e.printStackTrace();
-        }
-    }
-
-    // Handles the "Reset" button click to clear all courses.
-    @FXML
-    private void handleResetCoursesButtonAction() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirm Reset");
-        alert.setHeaderText("Clear All Courses");
-        alert.setContentText("Are you sure you want to delete all courses? This action cannot be undone.");
-        
-        if (alert.showAndWait().get() == ButtonType.OK) {
-            courseList.clear();
-            updateCreditsAndGpa();
-            errorLabel.setText("All courses have been reset!");
         }
     }
 

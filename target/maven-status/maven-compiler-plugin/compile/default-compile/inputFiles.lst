@@ -1,5 +1,9 @@
+/home/tahmids55/GPACalculator/src/main/java/com/gpa/calculator/DatabaseManager.java
+/home/tahmids55/GPACalculator/src/main/java/com/gpa/calculator/CurrentStudent.java
 /home/tahmids55/GPACalculator/src/main/java/com/gpa/calculator/HomeScreenController.java
+/home/tahmids55/GPACalculator/src/main/java/com/gpa/calculator/LoginScreenController.java
 /home/tahmids55/GPACalculator/src/main/java/com/gpa/calculator/Course.java
 /home/tahmids55/GPACalculator/src/main/java/com/gpa/calculator/CourseEntryScreenController.java
+/home/tahmids55/GPACalculator/src/main/java/com/gpa/calculator/Student.java
 /home/tahmids55/GPACalculator/src/main/java/com/gpa/calculator/ResultScreenController.java
 /home/tahmids55/GPACalculator/src/main/java/com/gpa/calculator/GpaCalculatorApp.java

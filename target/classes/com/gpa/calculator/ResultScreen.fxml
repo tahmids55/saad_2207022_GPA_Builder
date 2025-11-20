@@ -4,12 +4,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<!--
-  This FXML file defines the final result screen.
-  - It displays the calculated GPA in a prominent label.
-  - A TableView is used to show a summary of all the courses entered, resembling an "Award Form".
-  - A "Start Over" button allows the user to return to the home screen.
--->
 <BorderPane xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.gpa.calculator.ResultScreenController"
             prefHeight="600" prefWidth="800" styleClass="root">
@@ -21,6 +15,8 @@
             </padding>
 
             <Label text="GPA Calculation Result" styleClass="header-label"/>
+            
+            <Label fx:id="studentInfoLabel" styleClass="label"/>
 
             <Label fx:id="gpaLabel" styleClass="gpa-result-label"/>
 

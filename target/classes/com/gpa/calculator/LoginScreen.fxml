@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gpa.calculator.LoginScreenController"
+            prefHeight="400" prefWidth="600" styleClass="root">
+
+    <center>
+        <VBox alignment="CENTER" spacing="20">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <Label text="Student Login" styleClass="header-label"/>
+            
+            <VBox spacing="10">
+                <Label text="Roll Number:" styleClass="label"/>
+                <TextField fx:id="rollNumberField" promptText="Enter your roll number"/>
+                
+                <Label text="Name:" styleClass="label"/>
+                <TextField fx:id="nameField" promptText="Enter your full name"/>
+            </VBox>
+            
+            <Label fx:id="errorLabel" styleClass="error-label" textFill="#ef4444"/>
+            
+            <HBox alignment="CENTER" spacing="10">
+                <Button text="Login" onAction="#handleLoginButtonAction" styleClass="button"/>
+                <Button text="Back" onAction="#handleBackButtonAction" styleClass="button"/>
+            </HBox>
+        </VBox>
+    </center>
+
+</BorderPane>

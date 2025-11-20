@@ -1,5 +1,10 @@
 com/gpa/calculator/GpaCalculatorApp.class
-com/gpa/calculator/HomeScreenController.class
+com/gpa/calculator/LoginScreenController.class
 com/gpa/calculator/CourseEntryScreenController.class
+com/gpa/calculator/Student.class
+com/gpa/calculator/HomeScreenController.class
+com/gpa/calculator/CurrentStudent.class
+com/gpa/calculator/CourseEntryScreenController$1.class
 com/gpa/calculator/ResultScreenController.class
+com/gpa/calculator/DatabaseManager.class
 com/gpa/calculator/Course.class

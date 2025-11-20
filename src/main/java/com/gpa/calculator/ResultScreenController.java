@@ -24,6 +24,7 @@ public class ResultScreenController implements Initializable {
 
     // --- FXML UI Components ---
     @FXML private Label gpaLabel;
+    @FXML private Label studentInfoLabel;
     @FXML private TableView<Course> resultTableView;
     @FXML private TableColumn<Course, String> courseNameCol;
     @FXML private TableColumn<Course, String> courseCodeCol;
@@ -32,9 +33,13 @@ public class ResultScreenController implements Initializable {
     @FXML private TableColumn<Course, String> teacher1Col;
     @FXML private TableColumn<Course, String> teacher2Col;
 
+    private DatabaseManager databaseManager;
+
     // This method is called automatically after the FXML is loaded.
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        databaseManager = new DatabaseManager();
+        
         // Set up the table columns to bind to the Course objects properties.
         courseNameCol.setCellValueFactory(new PropertyValueFactory<>("courseName"));
         courseCodeCol.setCellValueFactory(new PropertyValueFactory<>("courseCode"));
@@ -46,8 +51,20 @@ public class ResultScreenController implements Initializable {
 
     // This public method is called by the CourseEntryScreenController to pass data.
     public void setResults(ObservableList<Course> courses, double gpa) {
+        Student currentStudent = CurrentStudent.getStudent();
+        
         // Display the final GPA, formatted to two decimal places.
         gpaLabel.setText(String.format("Your Final GPA is: %.2f", gpa));
+        
+        // Display student info
+        if (currentStudent != null) {
+            studentInfoLabel.setText(String.format("Student: %s (Roll: %s)", 
+                    currentStudent.getName(), currentStudent.getRollNumber()));
+            
+            // Save GPA to database
+            databaseManager.updateStudentGpa(currentStudent.getId(), gpa);
+        }
+        
         // Populate the table with the list of courses.
         resultTableView.setItems(courses);
     }
@@ -58,6 +75,7 @@ public class ResultScreenController implements Initializable {
         try {
             // Clear the course list for a fresh start
             CourseEntryScreenController.courseList.clear();
+            CurrentStudent.clear();
             
             // Load the home screen FXML.
             Parent homeScreenRoot = FXMLLoader.load(getClass().getResource("HomeScreen.fxml"));
